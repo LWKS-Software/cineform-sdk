@@ -2379,7 +2379,7 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 				case CODEC_TAG_INDEX:
 					// Get the number of channels in the index to skip
 					channel_count = segment.tuple.value;
-					DecodeGroupIndex(input, (uint32_t *)&channel_size[0], channel_count);
+					DecodeGroupIndex( input, (uint32_t*)&channel_size[ 0 ], min( channel_count, TRANSFORM_MAX_CHANNELS ) );
 					break;
 
 				case CODEC_TAG_FRAME_WIDTH:
@@ -23165,7 +23165,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		{
 			int count = value;
 			uint32_t *index = (uint32_t *)(&codec->channel_size[0]);
-			DecodeGroupIndex(input, index, count);
+			DecodeGroupIndex( input, index, min( count, TRANSFORM_MAX_CHANNELS ) );
 			codec->num_channels = count;
 		}
 		break;

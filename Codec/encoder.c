@@ -716,7 +716,7 @@ void AttachMetadata(ENCODER *encoder, METADATA *dst, METADATA *src)
 			}
 		}
 	}
-	else
+	else if ( src->size > 0 )
 	{
 #if _ALLOCATOR
 		AllocMetadata(encoder->allocator, dst, src->size);
@@ -1598,7 +1598,8 @@ bool InitializeEncoderWithParameters(ENCODER *encoder, TRANSFORM *transform[], i
 #endif
 
 	// Check that the frame dimensions are appropriate for the transform
-	assert(IsFrameTransformable(chroma_width, height, transform_type, num_spatial));
+	if ( !IsFrameTransformable( chroma_width, height, transform_type, num_spatial ) )
+		return false;
 
 	// Should return an error if the frame size is not apppropriate
 	// but have never encountered this situation in testing so far
